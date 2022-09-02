@@ -27,12 +27,16 @@ plt.title('rotation_shake_rate')
 # 设置串口
 ser1 = init_serial()
 ser2 = init_serial()
-ser1.port = ''
-ser2.port = ''
-ser1.baudrate = 0
-ser2.baudrate = 0
+# 串口名称
+ser1.port = 'COM98'
+ser2.port = 'COM97'
+# 波特率
+ser1.baudrate = 115200
+ser2.baudrate = 115200
+# 接收值大小
 ser1.bytesize = 8
 ser2.bytesize = 8
+#
 ser1.parity = serial.PARITY_NONE
 ser2.parity = serial.PARITY_NONE
 ser1.stopbits = 1
@@ -67,9 +71,9 @@ while True:
         data1 = ser1.read(num1).decode('UTF-8')
         # 解析出来是二进制
         data2 = ser2.read(1)
-        intdata = int.from_bytes(data2,byteorder='big',signed=False)
+        intdata = int.from_bytes(data2, byteorder='big', signed=False)
         rotation.append(data1)
         shake.append(intdata)
-        plt.plot(rotation,shake,'-r')
+        plt.plot(rotation, shake, '-r')
         plt.draw()
     time.sleep(0.002)
