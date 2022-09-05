@@ -58,7 +58,6 @@ temperature = []
 
 # 循环接收串口值
 while True:
-
     if not ser1.isOpen:
         ser1.open()
     if not ser2.isOpen:
