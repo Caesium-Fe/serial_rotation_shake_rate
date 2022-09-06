@@ -17,12 +17,8 @@ def init_serial():
 
 
 # 创建画布
-plt.grid(True) # 添加网格
 plt.ion()
-plt.figure(1)
-plt.xlabel('rotation')
-plt.ylabel('shake')
-plt.title('rotation_shake_rate')
+plt.figure(1, figsize=(15.7, 6), dpi=80)
 
 # 设置串口
 ser1 = init_serial()
@@ -73,6 +69,20 @@ while True:
         intdata = int.from_bytes(data2, byteorder='big', signed=False)
         rotation.append(data1)
         shake.append(intdata)
-        plt.plot(rotation, shake, '-r')
-        plt.draw()
+        # 清除之前遗留数据
+        if len(rotation) > 10:
+            rotation = rotation[-10:]
+            shake = shake[-10:]
+        # 指定x轴y轴数据样式
+        plt.clf()
+        plt.plot(range(len(rotation)), shake, '-r')
+        plt.xticks(range(len(rotation)), rotation)
+        plt.yticks(shake)
+
+        plt.grid(True)  # 添加网格
+        plt.xlabel('rotation')
+        plt.ylabel('shake')
+        plt.title('rotation_shake_rate')
+        plt.pause(0.1)
+        plt.ioff()
     time.sleep(0.002)
