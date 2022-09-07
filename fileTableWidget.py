@@ -11,9 +11,10 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import matplotlib
-matplotlib.use("Qt5Agg")
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+
+matplotlib.use("Qt5Agg")
 
 
 class FileWidget(QWidget):
@@ -51,30 +52,34 @@ class FileTableWidget(QWidget):
         super(FileTableWidget, self).__init__(parent)
         self.setWindowTitle('')
         self.setObjectName('mainUi')
-        self.setMinimumSize(800, 500)
-        #self.setWindowIcon('')
+        self.setMinimumSize(1400, 700)
+        # self.setWindowIcon('')
         self.setStyleSheet('''
             QLabel#label{
                 color: rgba(51, 51, 51,1);
+                font-size:20px;
+            }QLabel#label1{
+                color: rgba(51, 51, 51,1);
                 font-weight: bold;
+                font-size:20px;
             }
-        
         ''')
+        # self.label3.setStyleSheet()
         self.initUi()
 
-    def initUi(self, datas=[' ',' ',' ',' ']):
+    def initUi(self, datas=[' ', ' ', ' ', ' ']):
         self.label1 = QLabel('深圳市日野精密科技有限公司', self)
         self.label2 = QLabel(self)
-        self.label3 = QLabel('振动' + datas[0] + 'mm/s', self)
+        self.label3 = QLabel('振动' + str(datas[0]) + 'mm/s', self)
         self.label4 = QLabel('转速' + datas[1] + 'rad/min', self)
-        self.label5 = QLabel('温度' + datas[2] + '℃',self)
-        self.label6 = QLabel('位移' + datas[3] + 'mm',self)
-        self.label1.setObjectName('label')
+        self.label5 = QLabel('温度' + datas[2] + '℃', self)
+        self.label6 = QLabel('位移' + datas[3] + 'mm', self)
+        self.label1.setObjectName('label1')
         self.label3.setObjectName('label')
         self.label4.setObjectName('label')
         self.label5.setObjectName('label')
         self.label6.setObjectName('label')
-        self.pushbutton = QPushButton('绘制', self)
+        self.pushbutton = QPushButton('Start', self)
         self.fileWidget = FileWidget(self)
         self.fileWidget.setObjectName('fileWidget')
         self.fileWidgetlayout = QVBoxLayout(self.fileWidget)
@@ -85,14 +90,14 @@ class FileTableWidget(QWidget):
         self.pushbutton.clicked.connect(lambda: self.updatePaint())
 
     def resizeEvent(self, QResizeEvent):
-        self.label1.setGeometry(100, 20, 200, 20)
-        self.label2.setGeometry(230,50,30,20)
-        self.label3.setGeometry(550,80,100,30)
-        self.label4.setGeometry(550,110,100,30)
-        self.label5.setGeometry(550,140,100,30)
-        self.label6.setGeometry(550,170,100,30)
-        self.fileWidget.setGeometry(10,50,500,400)
-        self.pushbutton.setGeometry(550,250,60,30)
+        self.label1.setGeometry(500, 20, 700, 20)
+        self.label2.setGeometry(1230, 50, 30, 20)
+        self.label3.setGeometry(1200, 110, 100, 30)
+        self.label4.setGeometry(1200, 250, 100, 30)
+        self.label5.setGeometry(1200, 410, 100, 30)
+        self.label6.setGeometry(1200, 550, 100, 30)
+        self.fileWidget.setGeometry(50, 50, 1050, 600)
+        self.pushbutton.setGeometry(1200, 650, 60, 30)
 
     def paintEvent(self, a0: QPaintEvent) -> None:
         opt = QStyleOption()
@@ -103,9 +108,15 @@ class FileTableWidget(QWidget):
     def updatePaint(self, lists=[]):
         print('begin')
         self.figure.axes.cla()
-        self.figure.axes.bar(lists)
+        self.figure.axes.plot(lists[:3])
         self.figure.axes.figure.canvas.draw()
         self.figure.axes.figure.canvas.flush_events()
+        print('end')
+        print('begin')
+        self.figure2.axes.cla()
+        self.figure2.axes.plot(lists[3:])
+        self.figure2.axes.figure.canvas.draw()
+        self.figure2.axes.figure.canvas.flush_events()
         print('end')
 
 
