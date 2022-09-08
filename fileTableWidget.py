@@ -13,6 +13,7 @@ from PyQt5.QtCore import *
 import matplotlib
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from threading import Thread
 
 matplotlib.use("Qt5Agg")
 
@@ -47,6 +48,10 @@ class MyFigure(FigureCanvas):
         super(MyFigure, self).__init__(self.fig)
 
 
+def getPortData(port_name):
+
+
+
 class FileTableWidget(QWidget):
     def __init__(self, parent=None):
         super(FileTableWidget, self).__init__(parent)
@@ -65,8 +70,15 @@ class FileTableWidget(QWidget):
             }
         ''')
         # self.label3.setStyleSheet()
+        datas = self.getDatas()
+        self.initUi(datas)
 
-        self.initUi()
+    def getDatas(self):
+        datas = []
+        for i in range(3):
+            t = Thread(target=getPortData, args=('t1',))
+            t.start()
+        return datas
 
     def initUi(self, datas=[' ', ' ', ' ', ' ']):
         self.label1 = QLabel('深圳市日野精密科技有限公司', self)

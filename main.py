@@ -1,14 +1,39 @@
+import re
+
 import serial
 import matplotlib.pyplot as plt
 import numpy as np
 import time
 from Log import Log
+import serial.tools.list_ports
 
 
-def init_serial():
-    ser = serial.Serial()
-    return ser
+def init_serial(port_name, btl):
+    try:
+        ser = serial.Serial(port_name, btl, timeout=2)
+        return ser
+    except Exception as err:
+        Log.logger.exception("No port is " + str(port_name))
+        prot = get_port_name()
+        Log.logger.info("No port is " + str(prot))
 
+
+def get_port_name():
+    port_list = list(serial.tools.list_ports.comports())
+    if len(port_list) <= 0:
+
+    # if len(port_list) <= 0:
+        Log.logger.info("The Serial port can't find!")
+        # wx.MessageBox("The Serial port can't find!", 'Info', wx.OK | wx.ICON_INFORMATION)
+    else:
+        print(len(port_list))
+        # print(port_list[0].description)
+        for p in port_list:
+            if 'USB Serial Port'.lower() in p.description.lower():
+                des = p.description
+                r = re.search('\(([0-9z-zA-Z]*)\)', des, re.I)
+                if r:
+                    return r.group(1)
 
 Log.logger.info("start")
 
@@ -23,27 +48,28 @@ Log.logger.info("start")
 # plt.ion()
 # plt.figure(1, figsize=(15.7, 6), dpi=80)
 
-# 设置串口
-ser1 = init_serial()
-# ser2 = init_serial()
 # 串口名称
-ser1.port = 'COM3'
+port = 'COM3'
 # ser2.port = 'COM97'
 # 波特率
-ser1.baudrate = 115200
+baudrate = 115200
+
+# 设置串口
+ser1 = init_serial(port, baudrate)
+# ser2 = init_serial()
 # ser2.baudrate = 115200
 # 接收值大小
-ser1.bytesize = 8
+# ser1.bytesize = 8
 # ser2.bytesize = 8
 #
-ser1.parity = serial.PARITY_NONE
+# ser1.parity = serial.PARITY_NONE
 # ser2.parity = serial.PARITY_NONE
-ser1.stopbits = 1
+# ser1.stopbits = 1
 # ser2.stopbits = 1
-ser1.timeout = 0.001
+# ser1.timeout = 0.001
 # ser2.timeout = 0.001
 
-ser1.close()
+# ser1.close()
 # ser2.close()
 
 # # 判断接口是否正确连接
