@@ -49,7 +49,7 @@ Log.logger.info("start")
 # plt.figure(1, figsize=(15.7, 6), dpi=80)
 
 # 串口名称
-port = 'COM3'
+port = 'USB Serial Port(COM3)'
 # ser2.port = 'COM97'
 # 波特率
 baudrate = 115200
@@ -99,9 +99,9 @@ while True:
     # if num1 and num2:
         # 解析出来是字符串
         try:
+            Log.logger.info("com3's data type is " + type(num1))
             data1 = ser1.read(num1).decode('UTF-8')
         # print(data1)
-            Log.logger.info("com3's data type is " + type(num1))
         except Exception:
             Log.logger.exception("No port is " + str(ser1.port))
         # 解析出来是二进制
