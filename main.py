@@ -16,6 +16,7 @@ def init_serial(port_name, btl):
         Log.logger.exception("No port is " + str(port_name))
         prot = get_port_name()
         Log.logger.info("No port is " + str(prot))
+        ser.close()
 
 
 def get_port_name():
@@ -99,10 +100,12 @@ while True:
     # if num1 and num2:
         # 解析出来是字符串
         try:
+            Log.logger.info("com3's data type is " + type(num1))
             data1 = ser1.read(num1).decode('UTF-8')
         # print(data1)
-            Log.logger.info("com3's data type is " + type(num1))
+            Log.logger.info("com3's data type is " + type(data1))
         except Exception:
+            ser1.close()
             Log.logger.exception("No port is " + str(ser1.port))
         # 解析出来是二进制
         # data2 = ser2.read(1)
