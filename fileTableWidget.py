@@ -65,12 +65,13 @@ class FileTableWidget(QWidget):
             }
         ''')
         # self.label3.setStyleSheet()
+
         self.initUi()
 
     def initUi(self, datas=[' ', ' ', ' ', ' ']):
         self.label1 = QLabel('深圳市日野精密科技有限公司', self)
         self.label2 = QLabel(self)
-        self.label3 = QLabel('振动' + str(datas[0]) + 'mm/s', self)
+        self.label3 = QLabel('振动' + datas[0] + 'mm/s', self)
         self.label4 = QLabel('转速' + datas[1] + 'rad/min', self)
         self.label5 = QLabel('温度' + datas[2] + '℃', self)
         self.label6 = QLabel('位移' + datas[3] + 'mm', self)

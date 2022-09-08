@@ -2,7 +2,7 @@ import serial
 import matplotlib.pyplot as plt
 import numpy as np
 import time
-from logging import Log
+from Log import Log
 
 
 def init_serial():
