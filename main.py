@@ -2,12 +2,15 @@ import serial
 import matplotlib.pyplot as plt
 import numpy as np
 import time
+from logging import Log
 
 
 def init_serial():
     ser = serial.Serial()
     return ser
 
+
+Log.logger.info("start")
 
 # def open_true_fail(ser):
 #     if ser.isOpen():
@@ -24,7 +27,7 @@ def init_serial():
 ser1 = init_serial()
 # ser2 = init_serial()
 # 串口名称
-ser1.port = 'COM8'
+ser1.port = 'COM3'
 # ser2.port = 'COM97'
 # 波特率
 ser1.baudrate = 115200
@@ -63,13 +66,18 @@ while True:
         time.sleep(0.05)
         num1 = ser1.inWaiting()
     except Exception:
-        print(str(ser1.port) + " is something wrong!")
+        Log.logger.exception("No port is " + str(ser1.port))
+        # print(str(ser1.port) + " is something wrong!")
     # num2 = ser2.inWaiting()
     if num1:
     # if num1 and num2:
         # 解析出来是字符串
-        data1 = ser1.read(num1).decode('UTF-8')
-        print(data1)
+        try:
+            data1 = ser1.read(num1).decode('UTF-8')
+        # print(data1)
+            Log.logger.info("com3's data type is " + type(num1))
+        except Exception:
+            Log.logger.exception("No port is " + str(ser1.port))
         # 解析出来是二进制
         # data2 = ser2.read(1)
         # intdata = int.from_bytes(data2, byteorder='big', signed=False)
