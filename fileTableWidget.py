@@ -53,6 +53,8 @@ class MyFigure(FigureCanvas):
 
 def getPortData(port_name):
     pass
+# def getPortData(port_name):
+
 
 
 class FileTableWidget(QWidget):
@@ -81,6 +83,10 @@ class FileTableWidget(QWidget):
         for i in range(3):
             t = Thread(target=getPortData, args=('t1',))
             t.start()
+        datas = [' ', ' ', ' ', ' ']
+        # for i in range(3):
+        #     t = Thread(target=getPortData, args=('t1',))
+        #     t.start()
         return datas
 
     def initUi(self, datas=[' ', ' ', ' ', ' ']):
@@ -134,9 +140,6 @@ class FileTableWidget(QWidget):
         self.figure2.axes.figure.canvas.draw()
         self.figure2.axes.figure.canvas.flush_events()
         print('end')
-
-    def eventFilter(self, QObject, QEvent):
-        if self.label3
 
 
 if __name__ == '__main__':
