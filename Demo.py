@@ -27,14 +27,20 @@ def update(duration=100, interval=0.1):
     m = []
     n = []
     x = []
-    for i in range(duration):
+    # for i in range(duration):
+    i = 0
+    while duration:
         plt.pause(interval)
         l.append(scale1.get())
         m.append(sin(scale1.get()))
         n.append(cos(scale1.get()))
         x.append(i)
         ax1.set_title(label="var1")
-        ax1.plot(x, l, '-r', label='temperature')
+        ax1.plot(range(len(l)), l, '-r', label='temperature')
+        ax1.set_xticks(x)
+        ax1.set_xticklabels(l)
+
+        # plt.xticks(range(len(n)), n)
         ax2.set_title(label="var2")
         ax2.plot(x, n, '-c')
         ax3.set_title(label="var3")
@@ -43,17 +49,18 @@ def update(duration=100, interval=0.1):
         ax4.plot(x, n, '-y')
         ax5.set_title(label="var5")
         ax5.plot(x, m, '-b')
+        i += 1
     plt.draw()
 
 
 def display():
     plt.clf()
     fig = plt.figure(1, (10, 7.5), dpi=100)
-    ax1 = fig.add_subplot(511)
-    ax2 = fig.add_subplot(512)
-    ax3 = fig.add_subplot(513)
-    ax4 = fig.add_subplot(514)
-    ax5 = fig.add_subplot(515)
+    # ax1 = fig.add_subplot(511)
+    # ax2 = fig.add_subplot(512)
+    # ax3 = fig.add_subplot(513)
+    # ax4 = fig.add_subplot(514)
+    # ax5 = fig.add_subplot(515)
 
     canvas = FigureCanvasTkAgg(fig, master=frm1)  # A tk.DrawingArea.
     canvas.draw()
