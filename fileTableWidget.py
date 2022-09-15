@@ -16,6 +16,9 @@ from matplotlib.figure import Figure
 from threading import Thread
 
 matplotlib.use("Qt5Agg")
+# plt.switch_backend('agg')
+
+# global_rotation, global_temperature, global_move, global_shake = int
 
 
 class FileWidget(QWidget):
@@ -49,7 +52,7 @@ class MyFigure(FigureCanvas):
 
 
 def getPortData(port_name):
-
+    pass
 
 
 class FileTableWidget(QWidget):
@@ -74,7 +77,7 @@ class FileTableWidget(QWidget):
         self.initUi(datas)
 
     def getDatas(self):
-        datas = []
+        datas = [' ', ' ', ' ', ' ']
         for i in range(3):
             t = Thread(target=getPortData, args=('t1',))
             t.start()
@@ -118,19 +121,22 @@ class FileTableWidget(QWidget):
         painter = QPainter(self)
         self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
 
-    def updatePaint(self, lists=[]):
+    def updatePaint(self, lists=[[1,2,3],[1,2,3],[1,2,3],[1,2,3]]):
         print('begin')
         self.figure.axes.cla()
-        self.figure.axes.plot(lists[:3])
+        self.figure.axes.plot(lists[0],lists[1])
         self.figure.axes.figure.canvas.draw()
         self.figure.axes.figure.canvas.flush_events()
         print('end')
         print('begin')
         self.figure2.axes.cla()
-        self.figure2.axes.plot(lists[3:])
+        self.figure2.axes.plot(lists[2],lists[3])
         self.figure2.axes.figure.canvas.draw()
         self.figure2.axes.figure.canvas.flush_events()
         print('end')
+
+    def eventFilter(self, QObject, QEvent):
+        if self.label3
 
 
 if __name__ == '__main__':
