@@ -50,7 +50,7 @@ def update(duration=100, interval=0.1):
         ax5.set_title(label="var5")
         ax5.plot(x, m, '-b')
         i += 1
-    plt.draw()
+    # plt.draw()
 
 
 def display():
