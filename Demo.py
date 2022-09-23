@@ -1,3 +1,5 @@
+import time
+
 import matplotlib.pyplot as plt
 import numpy as np
 from tkinter import *
@@ -29,12 +31,20 @@ def update(duration=100, interval=0.1):
     x = []
     # for i in range(duration):
     i = 0
+    plt.grid(True)
+    # plt.clf()
     while duration:
+        # plt.cla()
         plt.pause(interval)
         l.append(scale1.get())
         m.append(sin(scale1.get()))
         n.append(cos(scale1.get()))
         x.append(i)
+        if len(l)>=50:
+            l = l[-50:]
+            x = x[-50:]
+            m = m[-50:]
+            n = n[-50:]
         ax1.set_title(label="var1")
         ax1.plot(range(len(l)), l, '-r', label='temperature')
         ax1.set_xticks(x)
@@ -50,6 +60,8 @@ def update(duration=100, interval=0.1):
         ax5.set_title(label="var5")
         ax5.plot(x, m, '-b')
         i += 1
+        # plt.ioff()
+        # time.sleep(0.2)
     # plt.draw()
 
 
