@@ -40,7 +40,7 @@ def update(duration=100, interval=0.1):
         m.append(sin(scale1.get()))
         n.append(cos(scale1.get()))
         x.append(i)
-        if len(l)>=50:
+        if len(l) >= 50:
             l = l[-50:]
             x = x[-50:]
             m = m[-50:]
