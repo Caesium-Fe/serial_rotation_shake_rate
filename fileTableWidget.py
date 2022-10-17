@@ -51,7 +51,7 @@ class FileWidget(QWidget):
 
 
 class MyFigure(FigureCanvas):
-    def __init__(self, width=5, height=4, dpi=100):
+    def __init__(self, width=3.2, height=2.7, dpi=70):
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.add_subplot(111)
         super(MyFigure, self).__init__(self.fig)
@@ -66,7 +66,7 @@ class FileTableWidget(QWidget):
         super(FileTableWidget, self).__init__(parent)
         self.setWindowTitle('')
         self.setObjectName('mainUi')
-        self.setMinimumSize(1400, 700)
+        self.setMinimumSize(1500, 750)
         # self.setWindowIcon('')
         self.setStyleSheet('''
             QLabel#label{
@@ -96,6 +96,7 @@ class FileTableWidget(QWidget):
     def getDatas(self):
         # datas = [' ', ' ', ' ', ' ']
         # for i in range(3):
+        self.pushbutton.setEnabled(False)
         self.data1Thread = updateData1Thread(self)
         self.data1Thread.data1.connect(self.update1)
         self.data1Thread.start()
@@ -160,21 +161,36 @@ class FileTableWidget(QWidget):
 
     def update1(self, arg):
         # print("1  " + str(arg))
-        self.label3.setText('振动 ' + str(arg[0][-1]) + ' mm/s')
-        self.label4.setText('转速 ' + str(arg[1][-1]) + ' rad/min')
+        self.label3.setText('Vibration %5s mm/s' % str(arg[0][-1]))
+        self.label4.setText('Rotation %5s rad/min' % str(arg[1][-1]))
         print('begin')
         self.figure.axes.cla()
-        self.figure.axes.plot(arg[0], arg[1])
+        # self.figure.axes.plot(arg[0], arg[1])
+        self.figure.axes.plot(range(len(arg[0])), arg[1])
+        self.figure.axes.set_xlabel('Vibration')
+        self.figure.axes.set_ylabel('Rotation')
+        self.figure.axes.grid(True)
+        # self.figure.axes.set_xticks(arg[0])
+        # self.figure.axes.set_xticklabels(arg[0])
+        self.figure.axes.set_xticks(range(len(arg[0])))
+        self.figure.axes.set_xticklabels(arg[0])
+        # self.figure.axes.figure.xticks(range(len(arg[0])), arg[0])
+        # plt.xticks(range(len(arg[0])), arg[0])
+        # self.figure.axes.set_xticks(arg[0])
+        # self.figure.axes.set_xticklabels(arg[0])
+        # self.figure.axes.set_xticklabels(arg[0])
         self.figure.axes.figure.canvas.draw()
         self.figure.axes.figure.canvas.flush_events()
         print('end')
 
     def update2(self, arg):
-        self.label5.setText('温度 ' + str(arg[0][-1]) + ' ℃')
-        self.label6.setText('位移 ' + str(arg[1][-1]) + ' mm')
+        self.label5.setText('Temperature %5s ℃' % str(arg[0][-1]))
+        self.label6.setText('Displacement %5s mm' % str(arg[1][-1]))
         print('begin')
         self.figure2.axes.cla()
         self.figure2.axes.plot(arg[0], arg[1])
+        self.figure2.axes.set_xlabel('Temperature')
+        self.figure2.axes.set_ylabel('Displacement')
         self.figure2.axes.figure.canvas.draw()
         self.figure2.axes.figure.canvas.flush_events()
         print('end')
@@ -202,10 +218,11 @@ class FileTableWidget(QWidget):
         self.fileWidget = FileWidget(self)
         self.fileWidget.setObjectName('fileWidget')
         self.fileWidgetlayout = QVBoxLayout(self.fileWidget)
-        self.figure = MyFigure(self.width() * 0.9, self.height() * 0.9)
-        self.figure2 = MyFigure(self.width() * 0.9, self.height() * 0.9)
+        self.figure = MyFigure(self.width() * 0.1, self.height() * 0.1)
+        self.figure2 = MyFigure(self.width() * 0.1, self.height() * 0.1)
         self.fileWidgetlayout.addWidget(self.figure)
         self.fileWidgetlayout.addWidget(self.figure2)
+        # self.fileWidgetlayout.setSpacing(50)
         # self.pushbutton.clicked.connect(lambda: self.updatePaint())
         # self.pushbutton = QPushButton('Start', self)
         self.pushbutton.clicked.connect(lambda: self.getDatas())
@@ -213,11 +230,11 @@ class FileTableWidget(QWidget):
     def resizeEvent(self, QResizeEvent):
         self.label1.setGeometry(500, 20, 700, 20)
         self.label2.setGeometry(1230, 50, 30, 20)
-        self.label3.setGeometry(1200, 110, 100, 30)
-        self.label4.setGeometry(1200, 250, 100, 30)
-        self.label5.setGeometry(1200, 410, 100, 30)
-        self.label6.setGeometry(1200, 550, 100, 30)
-        self.fileWidget.setGeometry(50, 50, 1050, 600)
+        self.label3.setGeometry(1200, 110, 200, 30)
+        self.label4.setGeometry(1200, 250, 200, 30)
+        self.label5.setGeometry(1200, 410, 200, 30)
+        self.label6.setGeometry(1200, 550, 200, 30)
+        self.fileWidget.setGeometry(50, 50, 1100, 600)
         self.pushbutton.setGeometry(1200, 650, 60, 30)
 
     def paintEvent(self, a0: QPaintEvent) -> None:
