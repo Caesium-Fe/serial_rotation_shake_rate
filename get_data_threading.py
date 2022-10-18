@@ -31,9 +31,9 @@ class updateData1Thread(QThread):
             # data2_list.append(i)
             data1_list.append(i1)
             data2_list.append(i2)
-            if len(data1_list) > 10:
-                data1_list = data1_list[-10:]
-                data2_list = data2_list[-10:]
+            if len(data1_list) > 20:
+                data1_list = data1_list[-20:]
+                data2_list = data2_list[-20:]
             self.data1.emit([data1_list, data2_list])
 
             # print("1  " + str(i))
