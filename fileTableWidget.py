@@ -14,8 +14,10 @@ import matplotlib.pyplot as plt
 # import matplotlib
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from threading import Thread
-from get_data_threading import updateData1Thread, updateData2Thread
+# from threading import Thread
+# from get_data_threading import updateData1Thread, updateData2Thread
+from get_data_threading import updateData1Thread, updateData2Thread, updateData3Thread
+
 # from get_data_threading import GetData3Thread, GetData4Thread
 
 # matplotlib.use("Qt5Agg")
@@ -64,6 +66,9 @@ class FileTableWidget(QWidget):
 
     def __init__(self, parent=None):
         super(FileTableWidget, self).__init__(parent)
+        self.data1Thread = updateData1Thread(self)
+        self.data2Thread = updateData2Thread(self)
+        self.data3Thread = updateData3Thread(self)
         self.setWindowTitle('')
         self.setObjectName('mainUi')
         self.setMinimumSize(1500, 750)
@@ -96,68 +101,46 @@ class FileTableWidget(QWidget):
     def getDatas(self):
         # datas = [' ', ' ', ' ', ' ']
         # for i in range(3):
-        self.pushbutton.setEnabled(False)
-        self.data1Thread = updateData1Thread(self)
+        self.pushbutton1.setEnabled(False)
+        self.pushbutton2.setEnabled(True)
+        self.pushbutton3.setEnabled(False)
+        self.pushbutton4.setEnabled(True)
         self.data1Thread.data1.connect(self.update1)
         self.data1Thread.start()
-        self.data2Thread = updateData2Thread(self)
         self.data2Thread.data2.connect(self.update2)
         self.data2Thread.start()
-        # self.data3Thread = GetData3Thread(self)
-        # self.data3Thread.data3.connect(self.update_label5)
-        # self.data3Thread.start()
-        # self.data4Thread = GetData4Thread(self)
-        # self.data4Thread.data4.connect(self.update_label6)
-        # self.data4Thread.start()
-        # self.updatePainting = UpdatePainting(self)
-        # self.updatePainting.data_list.connect(self.updatePaint)
-        # self.updatePainting.start()
-        # t1 = Thread(target=self.getPortData1, args=('t1',))
-        # t1.start()
-        # t2 = Thread(target=self.getPortData2, args=('t1',))
-        # t2.start()
-        # t3 = Thread(target=self.getPortData3, args=('t1',))
-        # t3.start()
-        # t4 = Thread(target=self.getPortData4, args=('t1',))
-        # t4.start()
-        # datas.append()
-        # datas = [' ', ' ', ' ', ' ']
-        # for i in range(3):
-        #     t = Thread(target=getPortData, args=('t1',))
-        #     t.start()
-        # return datas
 
-    # def getPortData1(self, port_name):
-    #     i = 0
-    #     while i < 50:
-    #         self.data1.emit(i)
-    #         # print("1  "+ str(i))
-    #         i += 1
-    #     pass
-    #
-    # def getPortData2(self, port_name):
-    #     i = 0
-    #     while i < 50:
-    #         self.data2.emit(i)
-    #         # print("2  "+ str(i))
-    #         i += 1
-    #     pass
-    #
-    # def getPortData3(self, port_name):
-    #     i = 0
-    #     while i < 50:
-    #         self.data3.emit(i)
-    #         # print("3  "+ str(i))
-    #         i += 1
-    #     pass
-    #
-    # def getPortData4(self, port_name):
-    #     i = 0
-    #     while i < 50:
-    #         self.data4.emit(i)
-    #         # print("4  "+ str(i))
-    #         i += 1
-    #     pass
+    def pauseDraw(self):
+        self.pushbutton1.setEnabled(False)
+        self.pushbutton2.setEnabled(False)
+        self.pushbutton3.setEnabled(True)
+        self.pushbutton4.setEnabled(False)
+        self.data1Thread.pause()
+        self.data2Thread.pause()
+
+    def resumeDraw(self):
+        self.pushbutton1.setEnabled(False)
+        self.pushbutton2.setEnabled(True)
+        self.pushbutton3.setEnabled(False)
+        self.pushbutton4.setEnabled(True)
+        self.data1Thread.resume()
+        self.data2Thread.resume()
+        # try:
+        #     self.data1Thread.terminate()
+        #     self.data2Thread.terminate()
+        # except AttributeError:
+        #     self.pushbutton2.setEnabled(True)
+        #     pass
+
+    def drawUltimatePic(self):
+        self.pushbutton1.setEnabled(False)
+        self.pushbutton2.setEnabled(False)
+        self.pushbutton3.setEnabled(False)
+        self.pushbutton4.setEnabled(False)
+        self.data1Thread.pause()
+        self.data2Thread.pause()
+        self.data3Thread.data3.connect(self.update3)
+        self.data3Thread.start()
 
     def update1(self, arg):
         # print("1  " + str(arg))
@@ -198,6 +181,43 @@ class FileTableWidget(QWidget):
         print('end')
         # self.label4 = QLabel('转速' + str(self.data2) + 'rad/min', self)
 
+    def update3(self, arg):
+        # self.label5.setText('Temperature %5s ℃' % str(arg[0][-1]))
+        # self.label6.setText('Displacement %5s mm' % str(arg[1][-1]))
+        print('begin')
+        self.figure.axes.cla()
+        # self.figure.axes.plot(arg[0], arg[1])
+        self.figure.axes.plot(range(len(arg[0])), arg[1])
+        self.figure.axes.set_xlabel('Vibration')
+        self.figure.axes.set_ylabel('Rotation')
+        self.figure.axes.grid(True)
+        # self.figure.axes.set_xticks(arg[0])
+        # self.figure.axes.set_xticklabels(arg[0])
+        self.figure.axes.set_xticks(range(len(arg[0])))
+        self.figure.axes.set_xticklabels(arg[0], rotation=45)
+        # self.figure.axes.set_yticks(arg[1])
+        # self.figure.axes.set_yticklabels(arg[1])
+        # self.figure.axes.figure.xticks(range(len(arg[0])), arg[0])
+        # plt.xticks(range(len(arg[0])), arg[0])
+        # self.figure.axes.set_xticks(arg[0])
+        # self.figure.axes.set_xticklabels(arg[0])
+        # self.figure.axes.set_xticklabels(arg[0])
+        self.figure.axes.figure.canvas.draw()
+        self.figure.axes.figure.canvas.flush_events()
+        print('end')
+
+        print('begin')
+        self.figure2.axes.cla()
+        self.figure2.axes.plot(arg[2], arg[3])
+        self.figure2.axes.set_xlabel('Temperature')
+        self.figure2.axes.set_ylabel('Displacement')
+        self.figure2.axes.grid(True)
+        self.figure2.axes.set_xticks(range(len(arg[2])))
+        self.figure2.axes.set_xticklabels(arg[2])
+        self.figure2.axes.figure.canvas.draw()
+        self.figure2.axes.figure.canvas.flush_events()
+        print('end')
+
     # def update_label5(self, arg):
     #     self.label5.setText('温度 ' + str(arg) + ' ℃')
     #
@@ -216,7 +236,10 @@ class FileTableWidget(QWidget):
         self.label4.setObjectName('label')
         self.label5.setObjectName('label')
         self.label6.setObjectName('label')
-        self.pushbutton = QPushButton('Start', self)
+        self.pushbutton1 = QPushButton('Start', self)
+        self.pushbutton2 = QPushButton('Stop', self)
+        self.pushbutton3 = QPushButton('Resume', self)
+        self.pushbutton4 = QPushButton('Finish', self)
         self.fileWidget = FileWidget(self)
         self.fileWidget.setObjectName('fileWidget')
         self.fileWidgetlayout = QVBoxLayout(self.fileWidget)
@@ -231,7 +254,10 @@ class FileTableWidget(QWidget):
         # self.fileWidgetlayout.setSpacing(50)
         # self.pushbutton.clicked.connect(lambda: self.updatePaint())
         # self.pushbutton = QPushButton('Start', self)
-        self.pushbutton.clicked.connect(lambda: self.getDatas())
+        self.pushbutton1.clicked.connect(lambda: self.getDatas())
+        self.pushbutton2.clicked.connect(lambda: self.pauseDraw())
+        self.pushbutton3.clicked.connect(lambda: self.resumeDraw())
+        self.pushbutton4.clicked.connect(lambda: self.drawUltimatePic())
 
     def resizeEvent(self, QResizeEvent):
         self.label1.setGeometry(500, 20, 700, 20)
@@ -241,7 +267,10 @@ class FileTableWidget(QWidget):
         self.label5.setGeometry(1200, 410, 200, 30)
         self.label6.setGeometry(1200, 550, 200, 30)
         self.fileWidget.setGeometry(50, 50, 1100, 600)
-        self.pushbutton.setGeometry(1200, 650, 60, 30)
+        self.pushbutton1.setGeometry(1200, 650, 60, 30)
+        self.pushbutton2.setGeometry(1300, 650, 60, 30)
+        self.pushbutton3.setGeometry(1200, 700, 60, 30)
+        self.pushbutton4.setGeometry(1300, 700, 60, 30)
 
     def paintEvent(self, a0: QPaintEvent) -> None:
         opt = QStyleOption()
