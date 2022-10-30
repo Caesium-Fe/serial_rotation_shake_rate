@@ -176,6 +176,9 @@ class FileTableWidget(QWidget):
         self.figure2.axes.plot(arg[0], arg[1])
         self.figure2.axes.set_xlabel('Temperature')
         self.figure2.axes.set_ylabel('Displacement')
+        self.figure2.axes.grid(True)
+        self.figure2.axes.set_xticks(range(len(arg[0])))
+        self.figure2.axes.set_xticklabels(arg[0])
         self.figure2.axes.figure.canvas.draw()
         self.figure2.axes.figure.canvas.flush_events()
         print('end')
@@ -266,7 +269,7 @@ class FileTableWidget(QWidget):
         self.label4.setGeometry(1200, 250, 200, 30)
         self.label5.setGeometry(1200, 410, 200, 30)
         self.label6.setGeometry(1200, 550, 200, 30)
-        self.fileWidget.setGeometry(50, 50, 1100, 600)
+        self.fileWidget.setGeometry(50, 50, 1100, 700)
         self.pushbutton1.setGeometry(1200, 650, 60, 30)
         self.pushbutton2.setGeometry(1300, 650, 60, 30)
         self.pushbutton3.setGeometry(1200, 700, 60, 30)
@@ -277,20 +280,6 @@ class FileTableWidget(QWidget):
         opt.initFrom(self)
         painter = QPainter(self)
         self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
-
-    def updatePaint(self, arg):
-        print('begin')
-        self.figure.axes.cla()
-        self.figure.axes.plot(arg[0], arg[1])
-        self.figure.axes.figure.canvas.draw()
-        self.figure.axes.figure.canvas.flush_events()
-        print('end')
-        print('begin')
-        self.figure2.axes.cla()
-        self.figure2.axes.plot(arg[2], arg[3])
-        self.figure2.axes.figure.canvas.draw()
-        self.figure2.axes.figure.canvas.flush_events()
-        print('end')
 
 
 if __name__ == '__main__':

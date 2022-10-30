@@ -4,6 +4,9 @@ import time
 import random
 import numpy as np
 
+from displacement import SerialPortDisplace
+from temperature import SerialPortTemperature
+
 global i, j
 i, j = 0, 0
 
@@ -79,6 +82,8 @@ class updateData2Thread(QThread):
         self.mutex = QMutex()
         self.cond = QWaitCondition()
         self.parent = parent
+        self.displace_obj = SerialPortDisplace()
+        self.temperature_obj = SerialPortTemperature()
 
     def pause(self):
         self._isPause = True
@@ -89,7 +94,7 @@ class updateData2Thread(QThread):
 
     def run(self):
         # j = 0
-        global j
+        # global j
         # data3_list = []
         # data4_list = []
         global data3_list
@@ -98,8 +103,8 @@ class updateData2Thread(QThread):
             self.mutex.lock()
             if self._isPause:
                 self.cond.wait(self.mutex)
-            data3_list.append(j)
-            data4_list.append(j)
+            data3_list.append(self.displace_obj.get_port_data())
+            data4_list.append(self.temperature_obj.get_port_data())
             # if len(data3_list) > 10:
             data7_list = data3_list[-10:]
             data8_list = data4_list[-10:]
@@ -107,7 +112,6 @@ class updateData2Thread(QThread):
 
             # print("1  " + str(i))
             time.sleep(0.1)
-            j += 1
             # if j > 500:
             #     return
             self.mutex.unlock()
