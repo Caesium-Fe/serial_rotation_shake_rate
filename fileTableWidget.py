@@ -147,7 +147,7 @@ class FileTableWidget(QWidget):
         self.label3.setText('Vibration %5s mm/s' % str(arg[0][-1]))
         self.label4.setText('Rotation %5s rad/min' % str(arg[1][-1]))
         print('begin')
-        self.figure.axes.cla()
+        # self.figure.axes.cla()
         # self.figure.axes.plot(arg[0], arg[1])
         self.figure.axes.plot(range(len(arg[0])), arg[1])
         self.figure.axes.set_xlabel('Vibration')
@@ -166,12 +166,13 @@ class FileTableWidget(QWidget):
         # self.figure.axes.set_xticklabels(arg[0])
         self.figure.axes.figure.canvas.draw()
         self.figure.axes.figure.canvas.flush_events()
+        self.figure.axes.cla()
 
     def update2(self, arg):
         self.label5.setText('温度 %5s ℃' % str(arg[0][-1]))
         self.label6.setText('位移 %5s mm' % str(arg[1][-1]))
         print('begin')
-        self.figure2.axes.cla()
+        # self.figure2.axes.cla()
         self.figure2.axes.plot(range(len(arg[0])), arg[1])
         self.figure2.axes.set_xlabel('Temperature')
         self.figure2.axes.set_ylabel('Displacement')
@@ -181,6 +182,7 @@ class FileTableWidget(QWidget):
         self.figure2.axes.figure.canvas.draw()
         self.figure2.axes.figure.canvas.flush_events()
         print('end')
+        self.figure2.axes.cla()
         # self.label4 = QLabel('转速' + str(self.data2) + 'rad/min', self)
 
     def update3(self, arg):
