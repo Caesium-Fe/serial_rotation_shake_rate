@@ -4,17 +4,14 @@ import time
 import random
 import numpy as np
 
+from RotationAndShaking import GetTxtData
 from displacement import SerialPortDisplace
 from temperature import SerialPortTemperature
-
-global i, j
-i, j = 0, 0
 
 global data1_list, data2_list
 data1_list, data2_list = [], []
 global data3_list, data4_list
 data3_list, data4_list = [], []
-i, j = 0, 0
 
 
 # class globalData:
@@ -33,6 +30,7 @@ class updateData1Thread(QThread):
         self.mutex = QMutex()
         self.cond = QWaitCondition()
         self.parent = parent
+        self.data_obj = GetTxtData()
 
     def pause(self):
         self._isPause = True
@@ -42,31 +40,27 @@ class updateData1Thread(QThread):
         self.cond.wakeAll()
 
     def run(self):
-        global i
         # data1_list = []
         # data2_list = []
         global data1_list
         global data2_list
         while True:
-            # i = 0
-            # i1 = i
             self.mutex.lock()
             if self._isPause:
                 self.cond.wait(self.mutex)
-            i1 = np.around(random.uniform(10, 100), 2)
-            i2 = np.around(random.uniform(10, 100), 2)
+            i1 = self.data_obj.getShakingData()
+            i2 = self.data_obj.getRotationData()
             # data1_list.append(i)
             # data2_list.append(i)
             data1_list.append(i1)
             data2_list.append(i2)
             # if len(data1_list) > 20:
-            data5_list = data1_list[-20:]
-            data6_list = data2_list[-20:]
+            data5_list = data1_list[-10:]
+            data6_list = data2_list[-10:]
             self.data1.emit([data5_list, data6_list])
 
             # print("1  " + str(i))
             time.sleep(0.1)
-            i += 1
             # if i > 500:
             #     return
             self.mutex.unlock()
@@ -103,12 +97,15 @@ class updateData2Thread(QThread):
             self.mutex.lock()
             if self._isPause:
                 self.cond.wait(self.mutex)
-            data3_list.append(self.displace_obj.get_port_data())
-            data4_list.append(self.temperature_obj.get_port_data())
-            # if len(data3_list) > 10:
-            data7_list = data3_list[-10:]
-            data8_list = data4_list[-10:]
-            self.data2.emit([data7_list, data8_list])
+            temp = self.temperature_obj.get_port_data()
+            disp = self.displace_obj.get_port_data()
+            if temp != -100 and disp != 999:
+                data3_list.append(temp)
+                data4_list.append(disp)
+                # if len(data3_list) > 10:
+                data7_list = data3_list[-10:]
+                data8_list = data4_list[-10:]
+                self.data2.emit([data7_list, data8_list])
 
             # print("1  " + str(i))
             time.sleep(0.1)
@@ -144,3 +141,4 @@ class updateData3Thread(QThread):
         #     time.sleep(0.1)
         #     j += 1
         # pass
+
