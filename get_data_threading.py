@@ -68,15 +68,15 @@ class updateData1Thread(QThread):
             # data2_list.append(i)
             data1_list.append(i1)
             data2_list.append(i2)
-            if len(data1_list) > 10:
-                data1_list = data1_list[-10:]
-                data2_list = data2_list[-10:]
+            # if len(data1_list) > 10:
+            #     data1_list = data1_list[-10:]
+            #     data2_list = data2_list[-10:]
             data5_list = data1_list[-10:]
             data6_list = data2_list[-10:]
             self.data1.emit([data5_list, data6_list])
 
             # print("1  " + str(i))
-            time.sleep(0.1)
+            time.sleep(60)
             # if i > 500:
             #     return
             self.mutex.unlock()
@@ -122,15 +122,15 @@ class updateData2Thread(QThread):
             if temp != -100 and disp != 999:
                 data3_list.append(temp)
                 data4_list.append(disp)
-                if len(data3_list) > 10:
-                    data3_list = data3_list[-10:]
-                    data4_list = data4_list[-10:]
+                # if len(data3_list) > 10:
+                #     data3_list = data3_list[-10:]
+                #     data4_list = data4_list[-10:]
                 data7_list = data3_list[-10:]
                 data8_list = data4_list[-10:]
                 self.data2.emit([data7_list, data8_list])
 
             # print("1  " + str(i))
-            time.sleep(0.1)
+            time.sleep(60)
             # if j > 500:
             #     return
             self.mutex.unlock()

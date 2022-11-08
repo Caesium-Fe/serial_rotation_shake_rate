@@ -74,6 +74,7 @@ class SerialPortTemperature:
             b_num1 = self.ser1.readline(5)
             num1 = int.from_bytes(b_num1[:-1], 'big')
             num1 = (num1 - 1000) / 10
+            Log.logger.info(str(num1))
             return num1
         except Exception as e:
             # print(e)
