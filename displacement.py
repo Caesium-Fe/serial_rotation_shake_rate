@@ -30,7 +30,7 @@ class SerialPortDisplace:
 
     def init_serial(self):
         try:
-            ser = serial.Serial(self, self.port, self.baudrate, timeout=2)
+            ser = serial.Serial(self.port, self.baudrate, timeout=2)
             return ser
         except Exception as err:
             Log.logger.exception("No port is " + str(self.port))
@@ -56,8 +56,9 @@ class SerialPortDisplace:
                         return r.group(1)
 
     def write_order(self):
-        self.ser1.write(self.datahex_1)
-        self.ser1.write(self.datahex_2)
+        # self.ser1.write(self.datahex_1)
+        # self.ser1.write(self.datahex_2)
+        pass
 
     def get_port_data(self):
 
@@ -66,7 +67,7 @@ class SerialPortDisplace:
             if not self.ser1.isOpen:
                 self.ser1.open()
                 self.ser1.write(self.datahex)
-            # ser1.write(datahex_1)
+            self.ser1.write(self.datahex_1)
             self.ser1.write(self.datahex)
             # if not ser2.isOpen:
             #     ser2.open()
@@ -86,3 +87,9 @@ class SerialPortDisplace:
             # print(str(ser1.port) + " is something wrong!")
 
         time.sleep(0.002)
+
+
+if __name__ == '__main__':
+    displace_obj = SerialPortDisplace()
+    while True:
+        displace_obj.get_port_data()

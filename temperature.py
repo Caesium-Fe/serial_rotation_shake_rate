@@ -29,7 +29,7 @@ class SerialPortTemperature:
 
     def init_serial(self):
         try:
-            ser = serial.Serial(self, self.port, self.baudrate, timeout=2)
+            ser = serial.Serial(self.port, self.baudrate, timeout=2)
             return ser
         except Exception as err:
             Log.logger.exception("No port is " + str(self.port))
@@ -81,3 +81,9 @@ class SerialPortTemperature:
             Log.logger.exception("No port is " + str(self.ser1.port))
             return 0
             # print(str(ser1.port) + " is something wrong!")
+
+
+if __name__ == '__main__':
+    displace_obj = SerialPortTemperature()
+    while True:
+        displace_obj.get_port_data()
